@@ -16,7 +16,7 @@ module.exports = function (eleventyConfig) {
       const displayText = alias || title;
       const baseUrl = "https://ernestwambua.github.io";
       const url = title === "index" ? "" : title.toLowerCase().replace(/ /g, "-");
-      return `<a href='${baseUrl}/articles/${url.toLowerCase().replace(/ /g, "-")}'>${displayText}</a>`;
+      return `<a href='${baseUrl}/${url.toLowerCase().replace(/ /g, "-")}'>${displayText}</a>`;
     });
 
     // Fix image paths if needed
