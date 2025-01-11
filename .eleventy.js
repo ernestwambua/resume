@@ -4,23 +4,25 @@ module.exports = function (eleventyConfig) {
   // Add syntax highlighting
   eleventyConfig.addPlugin(syntaxHighlight);
 
+  eleventyConfig.addGlobalData("layout", "base.njk");
+
   // Handle asset copying
   eleventyConfig.addPassthroughCopy("images");
   eleventyConfig.addPassthroughCopy("assets");
 
   // Process Markdown links and images
   eleventyConfig.addTransform("content-processing", function (content) {
+    // Fix image paths if needed
+    content = content.replace(/!\[\[(.*?)\]\]/g, function (match, p1) {
+      return `<img src='/${p1}' />`;
+    });
+
     // Convert wiki-style links to regular markdown links
     content = content.replace(/\[\[(.*?)\]\]/g, function (match, p1) {
       const [title, alias] = p1.split("|");
       const displayText = alias || title;
       const url = title === "index" ? "" : title.toLowerCase().replace(/ /g, "-");
       return `<a href='/${url.toLowerCase().replace(/ /g, "-")}'>${displayText}</a>`;
-    });
-
-    // Fix image paths if needed
-    content = content.replace(/!\[\[(.*?)\]\]/g, function (match, p1) {
-      return `<img src='/images/${p1}' />`;
     });
 
     return content;
